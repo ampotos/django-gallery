@@ -8,7 +8,7 @@ body {
   width: 100%;
   display: inline-block;
 }
-
+ 
 @media (min-width: 576px) {
   .photo-grid {
     margin: 0 20px 0 20px;
@@ -19,6 +19,10 @@ body {
     -webkit-column-gap: 10px;
     -moz-column-gap: 10px;
     column-gap: 10px;
+  }
+
+  .card {
+      min-height: 345px;
   }
 }
 
@@ -33,18 +37,26 @@ body {
     -moz-column-gap: 10px;
     column-gap: 10px;
   }
+
+  .card {
+      min-height: 325px;
+  }
 }
 
 @media (min-width: 992px) {
   .photo-grid {
     margin: 0 20px 0 20px;
-    -webkit-columns: 4 200px;
-    -moz-columns: 4 200px;
-    columns: 4 200px;
+    -webkit-columns: 4 250px;
+    -moz-columns: 4 250px;
+    columns: 4 250px;
 
     -webkit-column-gap: 10px;
     -moz-column-gap: 10px;
     column-gap: 10px;
+  }
+
+  .card {
+      min-height: 375px;
   }
 }
 

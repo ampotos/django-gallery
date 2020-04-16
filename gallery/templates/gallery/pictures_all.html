@@ -1,10 +1,16 @@
 {% extends 'base.html' %}
 
-{% block title %} Tag: ... {% endblock %}
+{% block title %} All images {% endblock %}
+
+{% block subpage %} {% endblock %}
+
+{% block user_panel %}
+        <!-- add some space -->
+        <div class="my-3">&nbsp;</div>
+{% endblock %}
 
 {% block content %}
-<h3> Tag: {{ tag_name }} </h3>
-<hr>
+<!-- Photo Grid -->
 <ul class="photo-grid list-unstyled mb-4">
     {% for picture in pictures %}
     <li>

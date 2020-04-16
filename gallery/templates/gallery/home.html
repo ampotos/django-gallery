@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %} All images {% endblock %}
+
+{% block subpage %} {% endblock %}
+
+{% block user_panel %}
+        <!-- add some space -->
+        <div class="my-3">&nbsp;</div>
+{% endblock %}
+
+{% block content %}
+
+<ul class="photo-grid list-unstyled mb-4">
+  <li>
+    <a href="{% url 'gallery:pictures' %}" class="text-dark">
+      <div class="card rounded-0">
+        <img class="card-img-top rounded-0" src="{{ view.get_random_img.picture.url }}">
+        <div class="card-body">
+          <p class="card-text">
+	    All images
+	  </p>
+        </div>
+      </div>
+    </a>
+  </li>
+  {{tag_img}}
+  {% for t in tags %}
+  <li>
+    <a href="{% url 'gallery:tag_name' tag_name=t.name %}" class="text-dark">
+      <div class="card rounded-0">
+       <img class="card-img-top rounded-0" src="{{ t.img.picture.url }}">
+        <div class="card-body">
+          <p class="card-text">
+	    Tag: {{ t.name }}
+	  </p>
+        </div>
+      </div>
+    </a>
+  </li>
+  {% endfor %}
+</ul>
+
+{% endblock %}

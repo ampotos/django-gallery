@@ -10,28 +10,30 @@
 
 
 {% block content %}
-<div class="submission-form">
-{% if request.GET.q %}
-	{% for picture in pictures %}
-	<div class="card picture-container ml-2">
-		<img class="card-img" src="{{ picture.picture.url }}">
-		<div class="card-img-overlay">
-			<a href="{% url 'gallery:single_picture' album_name=picture.album.name pk=picture.pk %}">
-		</div>
-	</div>
-	{% empty %}
-		<p class="my-4">No pictures matching search query.</p>
-	{% endfor %}
+  {% if request.GET.q %}
+  <ul class="photo-grid list-unstyled mb-4">
+    {% for picture in pictures %}
+    <li>
+      <a href="{% url 'gallery:single_picture' pk=picture.pk %}" class="text-dark">
+        <div class="card rounded-0">
+          <img class="card-img-top rounded-0" src="{{ picture.picture.url }}">
+          <div class="card-body">
+            <p class="card-text">
+	      {{ picture.name }} <br/>
+	      {% for name in picture.tags.names %}
+	      {% if not forloop.first %}, {% endif %}
+	      <a href="{% url 'gallery:tag_name' tag_name=name %}">{{ name }}</a>
+	      {% endfor %}
+	    </p>
+              </div>
+        </div>
+      </a>
+        </li>
+    {% empty %}
+      <p >No images matching</p>
+    {% endfor %}
+</ul>
 {% else %}
-	<h3>Search</h3>
-	<form method="GET" action="{% url 'gallery:search' %}">
-	    <div class="input-group">
-	        <input type="text" class="form-control" placeholder="Type your query here..." name="q">
-	        <div class="input-group-append">
-	            <button class="btn btn-outline-primary" type="button"><i class="fas fa-search"></i></button>
-	        </div>
-	    </div>
-	</form>
+<h3>No search request</h3>
 {% endif %}
-</div>
 {% endblock %}

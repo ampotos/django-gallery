@@ -4,40 +4,32 @@ from .views import *
 app_name = "gallery"
 
 urlpatterns = [
-    path("", Albums.as_view(), name="albums"),
+    # need to move to list of view by tags
+    path("", PictureMenu.as_view(), name="home"),
+    # need to search in name + tags
     path("search/", PictureSearch.as_view(), name="search"),
+    # will be merged with search
     path("tags/<str:tag_name>/", PicturesByTags.as_view(), name="tag_name"),
-    # all albums
-    path("albums/", Albums.as_view(), name="albums"),
-    # add new album
-    path("albums/add/", AlbumCreate.as_view(), name="create_album"),
-    # pictures by album
-    path("albums/<str:album_name>/", PicturesByAlbum.as_view(), name="single_album"),
-    # upload pictures to album album_name
-    path(
-        "albums/<str:album_name>/upload/",
-        PictureUpload.as_view(),
-        name="upload_pictures",
-    ),
-    # delete album album_name
-    path("albums/<str:album_name>/delete/", AlbumDelete.as_view(), name="delete_album"),
-    # update name of the album album_name
-    path("albums/<str:album_name>/update/", AlbumUpdate.as_view(), name="update_album"),
+    # all images
+    path("image/", PictureAll.as_view(), name="pictures"),
+    # upload new zip
+    path("upload/zip/<str:upload_state>/", ZipUpload.as_view(), name="upload"),
+    path("upload/zip/", ZipUpload.as_view(), name="upload"),
     # single picture
     path(
-        "albums/<str:album_name>/<int:pk>/",
+        "image/<int:pk>/",
         PictureDetails.as_view(),
         name="single_picture",
     ),
     # delete single picture
     path(
-        "albums/<str:album_name>/<int:pk>/delete/",
+        "image/<int:pk>/delete/",
         PictureDelete.as_view(),
         name="delete_picture",
     ),
     # update single picture
     path(
-        "albums/<str:album_name>/<int:pk>/update/",
+        "image/<int:pk>/update/",
         PictureUpdate.as_view(),
         name="update_picture",
     ),

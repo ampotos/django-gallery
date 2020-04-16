@@ -21,15 +21,13 @@ from django.conf.urls.static import static
 from django.conf import settings
 
 
-from gallery.feeds import AlbumFeed
+#from gallery.feeds import AlbumFeed
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('accounts/', include('accounts.urls', namespace='accounts')),
-    # path('accounts/', include('django.contrib.auth.urls')),
-
-    path('feed/', AlbumFeed(), name='feed'),
+    path('taggit/', include('taggit_selectize.urls')),
+    path('accounts/', include('accounts.urls', namespace='accounts')),    
     path('', include('gallery.urls')),
 ]
 

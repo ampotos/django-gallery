@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block subpage %}
-    <a href="{% url 'gallery:update_picture' album_name=album_name pk=picture.pk %}" class="nav-link">
+    <a href="{% url 'gallery:update_picture' pk=picture.pk %}" class="nav-link">
     Update Picture <span class="sr-only">(current)</span> 
 	</a> 
 {% endblock %}
@@ -13,13 +13,13 @@
 {% block user_panel %} {% endblock %}
 
 {% block content %}
-<div class="submission-form">
-    <h3 class="my-4">You are updating the following picture:</h3>
-    <img src="{{ picture.picture.url }}" style="width: 200px;">
-    <form method="post" enctype="multipart/form-data" action="">
+<div class="submission-form pt-5">
+    <a href="{% url 'gallery:single_picture' pk=picture.pk %}"> <img src="{{ picture.picture.url }}" style="width: 75%;"> </a>
+    <form class="pt-5" method="post" enctype="multipart/form-data" action="">
         {% csrf_token %}
         {{ form.as_p }}
         <button class="btn btn-primary" type="submit">Submit</button>
     </form>
 </div>
 {% endblock %}
+
