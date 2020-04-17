@@ -95,7 +95,7 @@ class PictureMenu(LoginRequiredMixin, ListView):
 
     def get_random_img(self):
         pictures =  Picture.objects.all()
-        if len(picture):
+        if len(pictures):
             return pictures[randint(0, len(pictures) - 1)]
         return 0
         

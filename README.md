@@ -22,7 +22,11 @@ setup caddy server
 python3 manage.py makemigration --settings=website.settings.production
 python3 manage.py migrate --settings=website.settings.production
 python3 manage.py collectstatic  --settings=website.settings.production
-python3 manage.py runserver --settings=website.settings.production
+
+to test everything is good run `python3 manage.py runserver 0.0.0.0:8000 --settings=website.settings.production` (be sure to have the local IP of the rasp in authurized domain)
+
+next setup caddy to have https:
+
 
 # features
 quick notes on the features

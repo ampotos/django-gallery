@@ -7,3 +7,4 @@ Pillow
 pytz
 whitenoise
 taggit-selectize
+django-wsgi
