@@ -1,19 +1,27 @@
 a simple image gallery to see my collection of STL files.
-Based on https://github.com/kkosiba/django-gallery but modified a it everywhere to fit my needs.
+Based on https://github.com/kkosiba/django-gallery but modified a bit everywhere to fit my needs.
+
+The following notes where made when setting it up from scratch on a freshly flashed raspberry pi 3B+
 
 # requirement
 postgres
-django
+python3
 install requirements.txt (in a venv if you want)
+apt-get install libopenjp2-7 libtiff5
 
 # Setup
 quick notes on the setup (with https and nginx)
 
 in cloned repository:
-TODO  setup prod
-TODO setup nginx
+generate prod djano secret
+setup django user
+setup postgresql database
+change database settings in website/settings/production.py to match django user
+change allow host to match your domain in the same settings
+setup caddy server
 python3 manage.py makemigration --settings=website.settings.production
 python3 manage.py migrate --settings=website.settings.production
+python3 manage.py collectstatic  --settings=website.settings.production
 python3 manage.py runserver --settings=website.settings.production
 
 # features

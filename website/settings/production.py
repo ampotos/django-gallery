@@ -2,8 +2,6 @@
 
 from .base import *
 
-import django_heroku
-
 SECRET_KEY = os.environ.get("SECRET_KEY", "")
 
 DEBUG = False
@@ -17,5 +15,13 @@ STATIC_URL = "/static/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = "/media/"
 
-# Activate Django-Heroku.
-django_heroku.settings(locals())
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "StlViewer",
+        "USER": "test",
+        "PASSWORD": "test",
+        "HOST": "localhost",
+        "PORT": "",
+    }
+}

@@ -1,10 +1,9 @@
-black==19.3b0
+black
 Django
-django-heroku==0.3.1
-django-taggit==0.23.0
-gunicorn==19.9.0
-Pillow==5.2.0
-pytz==2018.5
-whitenoise==4.1.2
-django-six
+django-heroku
+django-taggit
+gunicorn
+Pillow
+pytz
+whitenoise
 taggit-selectize

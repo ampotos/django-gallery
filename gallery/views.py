@@ -95,7 +95,9 @@ class PictureMenu(LoginRequiredMixin, ListView):
 
     def get_random_img(self):
         pictures =  Picture.objects.all()
-        return pictures[randint(0, len(pictures) - 1)]
+        if len(picture):
+            return pictures[randint(0, len(pictures) - 1)]
+        return 0
         
     def get_random_img_tag(self, tag):
         tagged_img = list(Picture.objects.filter(tags__name__in=[tag.name]))
