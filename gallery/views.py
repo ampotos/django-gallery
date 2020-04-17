@@ -55,12 +55,27 @@ class ZipUpload(IsSuperuserMixin, FormView):
                             picture.tags.add(*img['tags'].split(','))
                             picture.save()
                         continue
-                    
-                    # if we are here we want to create the image
-                    img_name = ".".join(img['img_name'].split('.')[:-1])
-                    random_name = '%s%s.%s' % (img_name, uuid.uuid4(), img['img_name'].split('.')[-1])
-                    random_path = '%s/%s' % (settings.MEDIA_ROOT, random_name)
-                    img_data = z.read(img['img_name'])
+                    else:
+                        # get image data 
+                        img_name = ".".join(img['img_name'].split('.')[:-1])
+                        random_name = '%s%s.%s' % (img_name, uuid.uuid4(), img['img_name'].split('.')[-1])
+                        random_path = '%s/%s' % (settings.MEDIA_ROOT, random_name)
+                        img_data = z.read(img['img_name'])
+                        
+
+                    if Picture.objects.filter(description=img['stl_path']).count() != 0:
+                        # we already have that in db let's update tag and image if present
+                        for picture in Picture.objects.filter(description=img['stl_path']):
+                            picture.tags.add(*img['tags'].split(','))
+                            picture.save()
+
+                            if img['img_name'] != "":
+                                picture.picture.delete()
+                                picture.picture.save(random_name, BytesIO(img_data), save=True)
+                                picture.name = img['img_name']
+                                picture.save()
+                            
+                        continue
                     
                     try:
                         new_pic = Picture(

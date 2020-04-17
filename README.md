@@ -25,8 +25,16 @@ python3 manage.py collectstatic  --settings=website.settings.production
 
 to test everything is good run `python3 manage.py runserver 0.0.0.0:8000 --settings=website.settings.production` (be sure to have the local IP of the rasp in authurized domain)
 
-next setup caddy to have https:
+`gunicorn wsgi:application -b 0.0.0.0:8000` should have the same result
+if you want it to start at boot follow https://www.digitalocean.com/community/tutorials/how-to-set-up-django-with-postgres-nginx-and-gunicorn-on-ubuntu-16-04#create-a-gunicorn-systemd-service-file
 
+dowloaded latest caddy here https://github.com/caddyserver/caddy/releases
+CaddyFile should looke like:
+`
+<domain_name>
+reverse_proxy 127.0.0.1:8000
+`
+to auto start at boot follow https://caddyserver.com/docs/install
 
 # features
 quick notes on the features
@@ -34,7 +42,7 @@ quick notes on the features
 django admin available in /admin if you are superuser
 Account:
 	An account is needed to see the content
-	Account can be created only in Django admin
+	Account can be created only in Django admin (/admin)
 	Superuser only can upload new images, change description or tags and delete images
 
 view:
@@ -77,3 +85,4 @@ json format:
 
 non-existing tags will be created automatically
 Also it is possible to update tags of an image via the upload feature. For that "img_name" has to be an empty string and "stl_path" has to match with the image you want to add tags. Again missing tags will be created automatically.
+If an picture with the same stl_path exists, it's tag will be updated with the one in the zip and the image will be replaced by the on in the zip
