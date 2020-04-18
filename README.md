@@ -27,6 +27,7 @@ in cloned repository:
 
 - `gunicorn wsgi:application -b 0.0.0.0:8000` should have the same result
 - if you want it to start at boot follow https://www.digitalocean.com/community/tutorials/how-to-set-up-django-with-postgres-nginx-and-gunicorn-on-ubuntu-16-04#create-a-gunicorn-systemd-service-file
+- If you are running on a rasp and plan to upload big zips, you will need to increase the defualt timeout (30s). For example for 5min timeout `--timeout 300`  .
 
 - dowload latest caddy here https://github.com/caddyserver/caddy/releases
 - CaddyFile should looke like:
