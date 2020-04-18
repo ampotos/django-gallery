@@ -1,12 +1,9 @@
-import random
-import shutil # for filesystem cleanup
-from os.path import isdir # to check if directory exists
-from django.conf import settings
+import os
 from django.db import models
 from django.utils import timezone
 from django.urls import reverse
 from taggit_selectize.managers import TaggableManager
-
+from django.conf import settings
 
 # Create your models here.
 
@@ -34,5 +31,7 @@ class Picture(models.Model):
     def delete(self, *args, **kwargs):
         """Custom delete method to remove pictures references not only from db, 
         but also from the filesystem"""
+        if os.path.isfile(os.path.join(settings.MEDIA_ROOT, self.picture.name)):
+            os.remove(os.path.join(settings.MEDIA_ROOT, self.picture.name))
         self.picture.delete()
         super().delete(*args, **kwargs)
