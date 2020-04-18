@@ -107,6 +107,7 @@ class ZipUpload(IsSuperuserMixin, FormView):
 class PictureMenu(LoginRequiredMixin, ListView):
     model = Tag
     template_name = "gallery/home.html"
+    paginate_by = 50
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -130,7 +131,7 @@ class PictureAll(LoginRequiredMixin, ListView):
     template_name = "gallery/pictures_all.html"
     context_object_name = "pictures"
     ordering = ("-creation_date",)
-    paginate_by = 12
+    paginate_by = 50
 
 class PictureUpdate(IsSuperuserMixin, UpdateView):
     model = Picture
