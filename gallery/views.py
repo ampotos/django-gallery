@@ -44,8 +44,8 @@ class ZipUpload(IsSuperuserMixin, FormView):
                     return 'no config.json'
                 try:
                     config = json.load(z.open('config.json'))
-                except json.JSONDecodeError:
-                    return 'json error'
+                except json.JSONDecodeError as e:
+                    return 'json error: ' + e.what()
                 
                 for img in config:
                     # to avoid null tags
@@ -91,8 +91,8 @@ class ZipUpload(IsSuperuserMixin, FormView):
                         new_pic.picture.save(random_name, BytesIO(img_data), save=True)
                         new_pic.tags.add(*img['tags'].split(','))
                         new_pic.save()
-                    except:
-                        return 'cannot save new picture'
+                    except Exception as e:
+                        return 'cannot save new picture: ' + e.what()
         except BadZipFile:
             return 'not a valid zip'
         return 'Success'
