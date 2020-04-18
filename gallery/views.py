@@ -46,7 +46,12 @@ class ZipUpload(IsSuperuserMixin, FormView):
                     config = json.load(z.open('config.json'))
                 except json.JSONDecodeError:
                     return 'json error'
+                
                 for img in config:
+                    # to avoid null tags
+                    if img['tags'].endswith(','):
+                        img['tags'] = img['tags'][:-1]
+                        
                     if img['stl_path'] == "":
                         return 'missing stl_path'
 
