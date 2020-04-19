@@ -32,8 +32,18 @@ in cloned repository:
 - dowload latest caddy here https://github.com/caddyserver/caddy/releases
 - CaddyFile should looke like:
 ```
-<domain_name>
-reverse_proxy 127.0.0.1:8000
+domain.name
+
+encode gzip zstd
+
+root * /home/pi/stl_viewer/website/
+
+@notStatic {
+  not path /static/* /media/*
+}
+
+reverse_proxy @notStatic localhost:8000
+file_server
 ```
 - to auto start at boot follow https://caddyserver.com/docs/install
 
@@ -74,7 +84,8 @@ quick notes on the features
   - the content is splitted in token (separated by spaces)
   - the result of the search is the list images where each token is easier a part of the name or a tag of the images
   - this allow to put multiple tags to norrow down a search
-  - it also allow to get all images containing a keyword and having some specific tags 
+  - it also allow to get all images containing a keyword and having some specific tags
+  - a taoken starting with a '!' will remove any picture with this token in their name or tags
 
 - Admin:
   - available at /admin
