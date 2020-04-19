@@ -154,10 +154,23 @@ class PictureSearch(LoginRequiredMixin, ListView):
         # results are images present in all tokens results 
         search_query = self.request.GET.get("q", None)
         if search_query:
-            token = list(filter(lambda x: x != "", search_query.split(" ")))
+            token = list(filter(lambda x: x != "" and not x.startswith("!"), search_query.split(" ")))
+            neg_token = list(filter(lambda x: x != "" and x.startswith("!"), search_query.split(" ")))
             if not len(token):
-                return results
+                return []
             res = list(Picture.objects.filter(tags__name=token[0]).distinct()) + list(Picture.objects.filter(Q(name__icontains=token[0])).distinct())
+            # for each img check that neg token is not a flag and not in name
+            p_to_del = []
+            for p in res:
+                for t in neg_token:
+                    if t[1:].lower() in p.name.lower():
+                        p_to_del.append(p)
+                    elif p.tags.filter(Q(name=t[1:])):
+                        p_to_del.append(p)
+
+            for p in p_to_del:
+                res.remove(p)
+                
             for t in token[1:]:
                 token_res = list(Picture.objects.filter(tags__name=t).distinct()) + list(Picture.objects.filter(Q(name__icontains=t)).distinct())
                 res = list(filter(lambda x: x in token_res, res))

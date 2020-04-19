@@ -10,7 +10,7 @@ The following notes where made when setting it up from scratch on a freshly flas
 - apt-get install libopenjp2-7 libtiff5
 
 # Setup
-quick notes on the setup (with https and nginx)
+quick notes on the setup (with gunicorn and caddyserver)
 
 in cloned repository:
 - generate prod djano secret and put it in https://caddyserver.com/docs/install
@@ -38,7 +38,7 @@ reverse_proxy 127.0.0.1:8000
 - to auto start at boot follow https://caddyserver.com/docs/install
 
 # features
-- quick notes on the features
+quick notes on the features
 
 - django admin available in /admin if you are superuser
 
