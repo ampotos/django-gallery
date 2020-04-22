@@ -1,0 +1,50 @@
+{% extends 'listing/base.html' %}
+
+{% block title %} {{ picture.picture.name }} {% endblock %}
+
+{% block subpage %} 
+{% endblock %}
+
+{% block content %}
+<div class="p-3">
+	<div class="row my-2 px-2">
+	  <div class="col-9 text-left">
+	    <h3 class="px-2">{{ listing.name }}</h3>
+	    <a href="{{ listing.link }}" class="px-2" target="_blank" rel="noopener noreferrer"> <i class="fas fa-external-link-alt"></i> {{ listing.link }} </a>
+	  </div>
+	  {% if user.is_superuser %}
+	  <div class="col-3 text-right">
+	    <a href="{% url 'listing:update' pk=listing.pk %}" data-toggle="tooltip" title="Update picture"><i class="fas fa-edit fa-lg mr-5"></i></a> <br/>
+	  </div>
+	  {% elif perms.listing.can_tag %}
+	  <div class="col-3 text-right">
+	    <a href="{% url 'listing:update_tag' pk=listing.pk %}" data-toggle="tooltip" title="Update picture"><i class="fas fa-edit fa-lg mr-5"></i></a> <br/>
+	  </div>
+	  {% else %}
+	  <div class="col-3 text-right">
+	  </div>
+	  {% endif %}
+	  <div class="col-9 text-left">
+	    <p class="px-2"> <b>Tags: </b>&nbsp;
+	    {% for name in listing.tags.names %}
+	    {% if not forloop.first %}, {% endif %}
+	    <a href="{% url 'listing:tag_name' tag_name=name %}">{{ name }}</a>
+	    {% endfor %}
+	    </p>
+	  </div>
+	  {% if user.is_superuser %}
+	  <div class="col-3 text-right">
+	    <a href="{% url 'listing:delete' pk=listing.pk %}" data-toggle="tooltip" title="Delete picture" class="mr-1"><i class="fas fa-trash-alt fa-lg mr-5"></i></a>
+	  </div>
+	  {% else %}
+	  <div class="col-3 text-right">
+	  </div>
+	  {% endif %}
+	  <div class="col-1 text-right">
+	    <h5 class="px-2"> Description: </h5> 
+	    <p class="px-2">{{ listing.description }}</p>
+	  </div>
+	</div>
+	
+</div>
+{% endblock %}

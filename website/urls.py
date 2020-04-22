@@ -28,6 +28,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('taggit/', include('taggit_selectize.urls')),
     path('accounts/', include('accounts.urls', namespace='accounts')),    
+    path('listing/', include('listing.urls')),
     path('', include('gallery.urls')),
 ]
 

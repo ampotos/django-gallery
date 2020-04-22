@@ -1,0 +1,20 @@
+{% extends 'listing/base.html' %}
+
+{% block title %} Search results for '{{ request.GET.q }}' {% endblock %}
+
+{% block subpage %} 
+	{% if request.GET.q %}
+		Search results for "{{ request.GET.q }}"
+	{% endif %}
+{% endblock %}
+
+{% block user_panel %}
+{% endblock %}
+
+{% block content %}
+{% if request.GET.q %}
+{% include 'listing/listing.html' %}
+{% else %}
+<h3>No search request</h3>
+{% endif %}
+{% endblock %}

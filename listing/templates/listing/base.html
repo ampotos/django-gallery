@@ -33,9 +33,9 @@
 <header>
     <div class="bg-dark">
       <nav class="navbar navbar-expand-md navbar-dark">
-	  <a href="{% url 'gallery:home' %}"><i class="fas fa-home fa-2x"></i> </a>
-	  <a href="{% url 'listing:all' %}"><i class="fas fa-list fa-2x ml-3"></i> </a>
-          <form class="navbar-brand ml-4 form-inline" method="GET" action="{% url 'gallery:search' %}">
+	  <a href="{% url 'listing:all' %}"><i class="fas fa-home fa-2x"></i> </a>
+	  <a href="{% url 'gallery:home' %}"><i class="fas fa-images fa-2x ml-3"></i> </a>
+          <form class="navbar-brand ml-4 form-inline" method="GET" action="{% url 'listing:search' %}">
             <div class="input-group input-group-sm">
               <input type="text" class="form-control" placeholder="Search..." name="q" value="{{ request.GET.q }}">
               <div class="input-group-append">
@@ -46,9 +46,9 @@
             </div>
           </form>
           {% if user.is_superuser %}
-	  <a href="{% url 'gallery:upload' %}"><i class="fas fa-upload fa-2x"></i> </a>
+	  <a href="{% url 'listing:add' %}"><i class="fas fa-plus-square fa-2x"></i> </a>
 	  {% endif %}
-	  <div class="navbar-nav text-light ml-auto"> GALLERY </div>
+	  <div class="navbar-nav text-light ml-auto"> LISTING </div>
           <ul class="navbar-nav ml-auto">
             {% if user.is_authenticated %}
             <li class="nav-item text-light">

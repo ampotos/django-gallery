@@ -1,7 +1,7 @@
 from django.conf import settings
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin, PermissionRequiredMixin
 from django.contrib.auth.models import User
-from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import user_passes_test, permission_required
 from django.db.models import Q  # complex lookups (for searching)
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
@@ -137,6 +137,15 @@ class PictureUpdate(IsSuperuserMixin, UpdateView):
     model = Picture
     fields = ['description', 'tags']
     template_name = "gallery/update_picture_form.html"
+
+    def get_success_url(self):
+        return reverse_lazy('gallery:single_picture', kwargs={'pk': self.kwargs['pk']})
+
+class PictureUpdateTagsView(PermissionRequiredMixin, UpdateView):
+    model = Picture
+    fields = ['tags']
+    template_name = "gallery/update_picture_form.html"
+    permission_required = "gallery.can_tag"
 
     def get_success_url(self):
         return reverse_lazy('gallery:single_picture', kwargs={'pk': self.kwargs['pk']})

@@ -13,6 +13,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'gallery',
     'accounts',
+    'listing',
     'taggit',
     'taggit_selectize'
 ]

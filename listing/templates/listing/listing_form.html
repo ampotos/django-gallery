@@ -1,20 +1,16 @@
-{% extends 'base.html' %}
+{% extends 'listing/base.html' %}
 
 {% block title %} 
     Update Picture
 {% endblock %}
 
 {% block subpage %}
-    <a href="{% url 'gallery:update_picture' pk=picture.pk %}" class="nav-link">
-    Update Picture <span class="sr-only">(current)</span> 
-	</a> 
 {% endblock %}
 
 {% block user_panel %} {% endblock %}
 
 {% block content %}
 <div class="submission-form pt-5">
-    <a href="{% url 'gallery:single_picture' pk=picture.pk %}"> <img src="{{ picture.picture.url }}" style="width: 75%;"> </a>
     <form class="pt-5" method="post" enctype="multipart/form-data" action="">
         {% csrf_token %}
         {{ form.as_p }}

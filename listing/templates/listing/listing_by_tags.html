@@ -1,0 +1,10 @@
+{% extends 'listing/base.html' %}
+
+{% block title %} Tag: ... {% endblock %}
+{% block user_panel %}
+{% endblock %}
+
+{% block content %}
+<h3> Tag: {{ tag_name }} </h3>
+ {% include 'listing/listing.html' %} 
+{% endblock %}

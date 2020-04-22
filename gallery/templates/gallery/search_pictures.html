@@ -9,19 +9,6 @@
 {% endblock %}
 
 {% block user_panel %}
-<div class="pagination">
-    <span class="step-links">
-        {% if page_obj.has_previous %}
-            <a href="?page=1"><i class="fas fa-angle-double-left fa-2x"></i></a>
-            <a href="?page={{ page_obj.previous_page_number }}"><i class="fas fa-angle-left fa-2x"></i></a>
-        {% endif %}
-        {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}"><i class="fas fa-angle-right fa-2x"></i></a>
-            <a href="?page={{ page_obj.paginator.num_pages }}"><i class="fas fa-angle-double-right fa-2x"></i></a>
-        {% endif %}
-    </span>
-</div>
-
 {% endblock %}
 
 {% block content %}

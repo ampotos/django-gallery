@@ -1,0 +1,38 @@
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <colgroup>
+	<col class="col-md-1" />
+	<col class="col-md-2" />
+	<col class="col-md-10" />
+	<col class="col-md-5" />
+      </colgroup>
+      <th>Link</th>
+      <th>Name</th>
+      <th>Tags</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+   <tbody>
+    {% for listing in listings %}
+    <tr>
+      <td>
+	<a target="_blank" rel="noopener noreferrer" href="{{ listing.link }}" class="text-dark"> <i class="fas fa-external-link-alt"></i> </a>
+      </td>
+      <td>
+	<a href="{% url 'listing:single' pk=listing.pk %}" class="text-dark">{{ listing.name }} </a>
+      </td>
+      <td>
+	{% for name in listing.tags.names %}
+	{% if not forloop.first %}, {% endif %}
+	<a href="{% url 'listing:tag_name' tag_name=name %}">{{ name }}</a>
+	{% endfor %}
+      </td>
+      <td>
+	{{ listing.description|truncatechars:30}}
+      </td>
+    {% empty %}
+        <p>No items to display.</p>
+    {% endfor %}
+   </tbody>
+</table>

@@ -71,6 +71,7 @@ quick notes on the features
 	
 - tag view:
   - Tags in the first home links to a tag list view, only images with the clicked tag are listed
+  - a user with can_tag permission can tag either listing or picture or both. These permissions has to be set in the django admin
 	
 - detail view:
   - in detail view you can the description which the path to the stl file in your system (to easily access it if you want to print it)
@@ -91,6 +92,11 @@ quick notes on the features
   - available at /admin
   - default django admin
   - user account has to be created manually here
+  - cann add listing.can_tag and gallery.can_tag permission
+
+- Listing:
+  - The listing symbols next to the home on switch to the listing view.
+  - This view has the same features than the gallery but contains links instead of images.
 
 # upload structure:
 - have to be a zip

@@ -33,4 +33,10 @@ urlpatterns = [
         PictureUpdate.as_view(),
         name="update_picture",
     ),
+    # update single picture tags only
+    path(
+        "image/<int:pk>/update_tag/",
+        PictureUpdateTagsView.as_view(),
+        name="update_picture_tag",
+    ),
 ]

@@ -18,6 +18,7 @@ class Picture(models.Model):
     class Meta:
         verbose_name_plural = "Pictures"
         ordering = ("-pk",)
+        permissions = (("can_tag", "Allow normal user to tag pictures"),)   
 
     def __str__(self):
         return self.description

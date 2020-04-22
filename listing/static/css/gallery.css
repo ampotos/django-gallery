@@ -1,0 +1,68 @@
+body {
+  background-color: #fff;
+  font-family: "Noto Sans", sans-serif;
+}
+
+.photo-grid li .card {
+  margin-bottom: 10px;
+  width: 100%;
+  display: inline-block;
+}
+ 
+@media (min-width: 576px) {
+  .photo-grid {
+    margin: 0 20px 0 20px;
+    -webkit-columns: 2 200px;
+    -moz-columns: 2 200px;
+    columns: 2 200px;
+
+    -webkit-column-gap: 10px;
+    -moz-column-gap: 10px;
+    column-gap: 10px;
+  }
+}
+
+@media (min-width: 768px) {
+  .photo-grid {
+    margin: 0 20px 0 20px;
+    -webkit-columns: 3 200px;
+    -moz-columns: 3 200px;
+    columns: 3 200px;
+
+    -webkit-column-gap: 10px;
+    -moz-column-gap: 10px;
+    column-gap: 10px;
+  }
+}
+
+@media (min-width: 992px) {
+  .photo-grid {
+    margin: 0 20px 0 20px;
+    -webkit-columns: 4 250px;
+    -moz-columns: 4 250px;
+    columns: 4 250px;
+
+    -webkit-column-gap: 10px;
+    -moz-column-gap: 10px;
+    column-gap: 10px;
+  }
+}
+
+footer {
+  position: relative;
+  bottom: 0;
+  width: 100%;
+  margin: 80px 0 50px 0;
+  text-align: center;
+}
+
+footer p {
+  color: #f9f9f9;
+}
+
+/* FORMS */
+.submission-form {
+  width: 60%;
+  margin: auto;
+  text-align: center;
+}
