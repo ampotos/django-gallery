@@ -167,7 +167,7 @@ class PictureSearch(LoginRequiredMixin, ListView):
             neg_token = list(filter(lambda x: x != "" and x.startswith("!"), search_query.split(" ")))
             if not len(token):
                 return []
-            res = list(Picture.objects.filter(tags__name=token[0]).distinct()) + list(Picture.objects.filter(Q(name__icontains=token[0])).distinct())
+            res = list(set(list(Picture.objects.filter(tags__name=token[0]).distinct()) + list(Picture.objects.filter(Q(name__icontains=token[0])).distinct())))
             # for each img check that neg token is not a flag and not in name
             p_to_del = []
             for p in res:

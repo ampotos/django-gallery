@@ -4,8 +4,8 @@
       <colgroup>
 	<col class="col-md-1" />
 	<col class="col-md-2" />
-	<col class="col-md-10" />
 	<col class="col-md-5" />
+	<col class="col-md-6" />
       </colgroup>
       <th>Link</th>
       <th>Name</th>
@@ -29,7 +29,7 @@
 	{% endfor %}
       </td>
       <td>
-	{{ listing.description|truncatechars:30}}
+	{{ listing.description|truncatechars:45}}
       </td>
     {% empty %}
         <p>No items to display.</p>
