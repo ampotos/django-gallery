@@ -47,7 +47,7 @@ class Image(models.Model):
     def delete(self, *args, **kwargs):
         """Custom delete method to remove image references not only from db, 
         but also from the filesystem"""
-        if self.linked_model.search_img.pk == self.pk:
+        if self.linked_model.search_img and self.linked_model.search_img.pk == self.pk:
             self.linked_model.search_img = None
             self.linked_model.save()
         if os.path.isfile(os.path.join(settings.MEDIA_ROOT, self.img.name)):
