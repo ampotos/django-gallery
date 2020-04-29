@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %} 
+    Update Model
+{% endblock %}
+
+{% block subpage %}
+    <a href="{% url 'gallery:update_model' pk=model3d.pk %}" class="nav-link">
+    Update Model <span class="sr-only">(current)</span> 
+	</a> 
+{% endblock %}
+
+{% block user_panel %} {% endblock %}
+
+{% block content %}
+<div class="submission-form pt-5">
+    <form class="pt-5" method="post" enctype="multipart/form-data" action="">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn btn-primary" type="submit">Submit</button>
+    </form>
+    {% for img in view.get_all_img %}
+    {% if not forloop.first %} {% endif %}
+    <br/>
+    image id: {{ img.pk }}
+       <img class="mb-2" src="{{ img.img.url }}" style="max-width: 100%; height: auto;">
+    {% endfor %}
+</div>
+{% endblock %}

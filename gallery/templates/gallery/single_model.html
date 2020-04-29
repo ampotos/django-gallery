@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %} {{ model.name }} {% endblock %}
+
+{% block subpage %} 
+{% endblock %}
+
+{% block content %}
+<div class="p-3">
+	<div class="row my-2 px-2">
+	  <div class="col-9 text-left">
+	    <p class="px-2">{{ model3d.description }}</p>
+	  </div>
+	  {% if user.is_superuser %}
+	  <div class="col-3 text-right">
+	    <a href="{% url 'gallery:update_model' pk=model3d.pk %}" data-toggle="tooltip" title="Update model"><i class="fas fa-edit fa-lg mr-5"></i></a> <br/>
+	  </div>
+	  {% elif perms.model3d.can_tag %}
+	  <div class="col-3 text-right">
+	    <a href="{% url 'gallery:update_model_tag' pk=model3d.pk %}" data-toggle="tooltip" title="Update model"><i class="fas fa-edit fa-lg mr-5"></i></a> <br/>
+	  </div>	  
+	  {% endif %}
+	  <div class="col-9 text-left">
+	    <p class="px-2"> <b>Tags: </b>&nbsp;
+	    {% for name in model3d.tags.names %}
+	    {% if not forloop.first %}, {% endif %}
+	    <a href="{% url 'gallery:tag_name' tag_name=name %}">{{ name }}</a>
+	    {% endfor %}
+	    </p>
+	  </div>
+	  {% if user.is_superuser %}
+	  <div class="col-3 text-right">
+	    <a href="{% url 'gallery:delete_model' pk=model3d.pk %}" data-toggle="tooltip" title="Delete model" class="mr-1"><i class="fas fa-trash-alt fa-lg mr-5"></i></a>
+	  </div>
+	  {% endif %}
+	</div>
+	{% for img in view.get_all_img %}
+	{% if not forloop.first %} {% endif %}
+	{% if user.is_superuser %}
+	 <a href="{% url 'gallery:delete_image' pk=img.pk model_pk=model3d.pk %}" data-toggle="tooltip" title="Delete model" class="mr-1"><i class="fas fa-trash-alt fa-lg mr-5"></i></a>
+	{% if model3d.search_img.pk == img.pk %}
+	SELECT SEARCH IMAGE:
+	{% endif %}
+	{% endif %}
+	<img class="mb-2" src="{{ img.img.url }}" style="max-width: 100%; height: auto;">
+	{% endfor %}
+	
+</div>
+{% endblock %}

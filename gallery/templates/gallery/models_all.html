@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %} All images {% endblock %}
+
+{% block subpage %} {% endblock %}
+
+{% block user_panel %}
+        <!-- add some space -->
+        <div class="my-3">&nbsp;</div>
+{% endblock %}
+
+{% block content %}
+<!-- Photo Grid -->
+<ul class="photo-grid list-unstyled mb-4">
+    {% for model in models %}
+    <li>
+      <a href="{% url 'gallery:single_model' pk=model.pk %}" class="text-dark">
+            <div class="card rounded-0">
+	      {% if model.search_img.img %}
+              <img class="card-img-top rounded-0" src="{{ model.search_img.img.url }}">
+	      {% endif %}
+              <div class="card-body">
+		<p class="card-text">
+		  {{ model.name }} <br/>
+		  {% for name in model.tags.names %}
+		  {% if not forloop.first %}, {% endif %}
+		  <a href="{% url 'gallery:tag_name' tag_name=name %}">{{ name }}</a>
+		  {% endfor %}
+		</p>
+              </div>
+            </div>
+          </a>
+        </li>
+    {% empty %}
+        <p>No items to display.</p>
+    {% endfor %}
+</ul>
+{% endblock %}

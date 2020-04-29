@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %} Search results for '{{ request.GET.q }}' {% endblock %}
+
+{% block subpage %} 
+	{% if request.GET.q %}
+		Search results for "{{ request.GET.q }}"
+	{% endif %}
+{% endblock %}
+
+{% block user_panel %}
+{% endblock %}
+
+{% block content %}
+  {% if request.GET.q %}
+  <ul class="photo-grid list-unstyled mb-4">
+    {% for model in models %}
+    <li>
+      <a href="{% url 'gallery:single_model' pk=model.pk %}" class="text-dark">
+        <div class="card rounded-0">
+	  {% if model.search_img.img %} 
+          <img class="card-img-top rounded-0" src="{{ model.search_img.img.url }}">
+	  {% endif %}
+          <div class="card-body">
+            <p class="card-text">
+	      {{ model.name }} <br/>
+	      {% for name in model.tags.names %}
+	      {% if not forloop.first %}, {% endif %}
+	      <a href="{% url 'gallery:tag_name' tag_name=name %}">{{ name }}</a>
+	      {% endfor %}
+	    </p>
+              </div>
+        </div>
+      </a>
+        </li>
+    {% empty %}
+      <p >No images matching</p>
+    {% endfor %}
+</ul>
+{% else %}
+<h3>No search request</h3>
+{% endif %}
+{% endblock %}
