@@ -71,12 +71,16 @@ quick notes on the features
 	
 - tag view:
   - Tags in the first home links to a tag list view, only images with the clicked tag are listed
-  - a user with can_tag permission can tag either listing or picture or both. These permissions has to be set in the django admin
+  - a user with can_tag permission can tag either listing or model or both. These permissions has to be set in the django admin
 	
 - detail view:
   - in detail view you can the description which the path to the stl file in your system (to easily access it if you want to print it)
+  - all images linked with this model will be displayed
   - if superuser you have button to edit or delete the images
+  - when in editing you can change the searhc image which will be displayed in the other views
   - When editing tags, they are autocompleted, putting a non existant tag will creat it automatically
+  - possibility to change displayed images in other views
+  - it is possible for a superuser to delete images fro, the detial view.
 
 - Upload:
   - just select the zip file to upload and go. If the upload fails a quick description of the problem will be displayed
@@ -86,7 +90,7 @@ quick notes on the features
   - the result of the search is the list images where each token is easier a part of the name or a tag of the images
   - this allow to put multiple tags to norrow down a search
   - it also allow to get all images containing a keyword and having some specific tags
-  - a taoken starting with a '!' will remove any picture with this token in their name or tags
+  - a taoken starting with a '!' will remove any model with this token in their name or tags
 
 - Admin:
   - available at /admin
@@ -105,7 +109,8 @@ quick notes on the features
 - json format:
 ```[                                                                                                                                                                                                                   
     {                                                                                                                                                                                                               
-        "img_name":"file_name_within_zip_file.png",                                                                                                                                                                                              
+        "img_names":["file_name1_within_zip_file.png",
+		     "file_name1_within_zip_file.png", ...]
         "stl_path":"path/to/your/stl/file/file.stl",                                                                                                                                                           
         "tags":"test42,test2,new_test"                                                                                                                                                                              
     }                                                                                                                                                                                                               
@@ -113,5 +118,6 @@ quick notes on the features
 ```
 
 - non-existing tags will be created automatically
-- Also it is possible to update tags of an image via the upload feature. For that "img_name" has to be an empty string and "stl_path" has to match with the image you want to add tags. Again missing tags will be created automatically.
-- If an picture with the same stl_path exists, it's tag will be updated with the one in the zip and the image will be replaced by the on in the zip
+- Also it is possible to update tags of an image via the upload feature. For that "img_names" has to be an empty string and "stl_path" has to match with the image you want to add tags. Again missing tags will be created automatically.
+- If an models with the same stl_path exists, it's tag will be updated with the one in the zip and the image will be replaced by the on in the zip
+- image_names can have as many images thant you want, when creating a new model the first image in img_names will be the one displayed in the all views (but detial vie display all of them)

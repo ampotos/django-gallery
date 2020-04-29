@@ -14,12 +14,11 @@ from django.views.generic.list import ListView
 from django.core.files.images import ImageFile
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
-from .models import Picture
+from .models import Model3D, Image
 from .forms import UploadZipForm
 from taggit.models import Tag
 from random import randint
 from zipfile import ZipFile, BadZipFile
-from PIL import Image
 from io import BytesIO
 import json
 import uuid
@@ -47,52 +46,70 @@ class ZipUpload(IsSuperuserMixin, FormView):
                 except json.JSONDecodeError as e:
                     return 'json error: ' + e.what()
                 
-                for img in config:
+                for model in config:
                     # to avoid null tags
-                    if img['tags'].endswith(','):
-                        img['tags'] = img['tags'][:-1]
+                    if model['tags'].endswith(','):
+                        model['tags'] = model['tags'][:-1]
                         
-                    if img['stl_path'] == "":
+                    if model['stl_path'] == "":
                         return 'missing stl_path'
 
-                    if img['img_name'] == "":
-                        for picture in Picture.objects.filter(description=img['stl_path']):
-                            picture.tags.add(*img['tags'].split(','))
-                            picture.save()
+                    img_list = []
+                    if len(model['img_names']) == 0:
+                        for m in Model3D.objects.filter(description=model['stl_path']):
+                            m.tags.add(*model['tags'].split(','))
+                            m.save()
                         continue
                     else:
-                        # get image data 
-                        img_name = ".".join(img['img_name'].split('.')[:-1])
-                        random_name = '%s%s.%s' % (img_name, uuid.uuid4(), img['img_name'].split('.')[-1])
-                        random_path = '%s/%s' % (settings.MEDIA_ROOT, random_name)
-                        img_data = z.read(img['img_name'])
-                        
+                        # get image data
+                        for img_name in model['img_names']:
+                            model_name = ".".join(img_name.split('.')[:-1])
+                            random_name = '%s%s.%s' % (model_name, uuid.uuid4(), img_name.split('.')[-1])
+                            random_path = '%s/%s' % (settings.MEDIA_ROOT, random_name)
+                            img_data = z.read(img_name)
 
-                    if Picture.objects.filter(description=img['stl_path']).count() != 0:
+                            img_list.append([random_name, img_data])
+
+                    if Model3D.objects.filter(description=model['stl_path']).count() != 0:
                         # we already have that in db let's update tag and image if present
-                        for picture in Picture.objects.filter(description=img['stl_path']):
-                            picture.tags.add(*img['tags'].split(','))
-                            picture.save()
+                        for m in Model3D.objects.filter(description=model['stl_path']):
+                            m.tags.add(*model['tags'].split(','))
+                            m.save()
 
-                            if img['img_name'] != "":
-                                picture.picture.delete()
-                                picture.picture.save(random_name, BytesIO(img_data), save=True)
-                                picture.name = img['img_name']
-                                picture.save()
+                            search_set = False
+                            # todo save images here
+                            for img_name, img_data in img_list:
+                                img = Image(linked_model=m)
+                                img.img.save(random_name, BytesIO(img_data), save=True)
+                                if not search_set:
+                                    m.search_img = img
+                                    m.save()
+                                    search_set = True
+                                    
+                            m.name = model_name
+                            m.save()
                             
                         continue
                     
                     try:
-                        new_pic = Picture(
-                            description = img['stl_path'],
-                            name = img_name,
+                        new_model = Model3D(
+                            description = model['stl_path'],
+                            name = model_name,
                         )
-                        new_pic.save()
-                        new_pic.picture.save(random_name, BytesIO(img_data), save=True)
-                        new_pic.tags.add(*img['tags'].split(','))
-                        new_pic.save()
+                        new_model.save()
+                        new_model.tags.add(*model['tags'].split(','))
+                        new_model.save()
+                        search_set = False
+                        # todo save images here
+                        for img_name, img_data in img_list:
+                            img = Image(linked_model=new_model)
+                            img.img.save(random_name, BytesIO(img_data), save=True)
+                            if not search_set:
+                                new_model.search_img = img
+                                new_model.save()
+                                search_set = True
                     except Exception as e:
-                        return 'cannot save new picture: ' + e.what()
+                        return 'cannot save new model: ' + e.what()
         except BadZipFile:
             return 'not a valid zip'
         return 'Success'
@@ -104,56 +121,62 @@ class ZipUpload(IsSuperuserMixin, FormView):
 
         return render(request, self.template_name, {"form": form})
     
-class PictureMenu(LoginRequiredMixin, ListView):
+class ModelMenu(LoginRequiredMixin, ListView):
     model = Tag
     template_name = "gallery/home.html"
     paginate_by = 50
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['tags'] = list(filter(lambda x: x['img'], [{'name': t.name, 'img': self.get_random_img_tag(t)} for t in Tag.objects.all()]))
+        context['tags'] = list(filter(lambda x: x['model'], [{'name': t.name, 'model': self.get_random_model_tag(t)} for t in Tag.objects.all()]))
         return context
 
-    def get_random_img(self):
-        pictures =  Picture.objects.all()
-        if len(pictures):
-            return pictures[randint(0, len(pictures) - 1)]
-        return 0
+    def get_model(self):
+        models = Model3D.objects.all()
+        return models[0]
         
-    def get_random_img_tag(self, tag):
-        tagged_img = list(Picture.objects.filter(tags__name__in=[tag.name]))
-        if len(tagged_img):
-            return tagged_img[randint(0, len(tagged_img) - 1)]
+    def get_random_model_tag(self, tag):
+        tagged_model = list(Model3D.objects.filter(tags__name__in=[tag.name]))
+        if len(tagged_model):
+            return tagged_model[randint(0, len(tagged_model) - 1)]
         return None
 
-class PictureAll(LoginRequiredMixin, ListView):
-    model = Picture
-    template_name = "gallery/pictures_all.html"
-    context_object_name = "pictures"
+class ModelAll(LoginRequiredMixin, ListView):
+    model = Model3D
+    template_name = "gallery/models_all.html"
+    context_object_name = "models"
     ordering = ("-creation_date",)
     paginate_by = 50
 
-class PictureUpdate(IsSuperuserMixin, UpdateView):
-    model = Picture
-    fields = ['description', 'tags']
-    template_name = "gallery/update_picture_form.html"
+class ModelUpdate(IsSuperuserMixin, UpdateView):
+    model = Model3D
+    fields = ['description', 'tags', 'search_img']
+    template_name = "gallery/update_model_form.html"
 
+    def get_form(self, form_class=None):    
+        form = super().get_form(form_class)
+        form.fields["search_img"].queryset = Image.objects.filter(linked_model=self.kwargs.get("pk", None))
+        return form
+    
+    def get_all_img(self):
+        return Image.objects.filter(linked_model=self.kwargs.get("pk", None))
+        
     def get_success_url(self):
-        return reverse_lazy('gallery:single_picture', kwargs={'pk': self.kwargs['pk']})
+        return reverse_lazy('gallery:single_model', kwargs={'pk': self.kwargs['pk']})
 
-class PictureUpdateTagsView(PermissionRequiredMixin, UpdateView):
-    model = Picture
+class ModelUpdateTagsView(PermissionRequiredMixin, UpdateView):
+    model = Model3D
     fields = ['tags']
-    template_name = "gallery/update_picture_form.html"
+    template_name = "gallery/update_model_form.html"
     permission_required = "gallery.can_tag"
 
     def get_success_url(self):
-        return reverse_lazy('gallery:single_picture', kwargs={'pk': self.kwargs['pk']})
+        return reverse_lazy('gallery:single_model', kwargs={'pk': self.kwargs['pk']})
 
-class PictureSearch(LoginRequiredMixin, ListView):
-    model = Picture
-    context_object_name = "pictures"
-    template_name = "gallery/search_pictures.html"
+class ModelSearch(LoginRequiredMixin, ListView):
+    model = Model3D
+    context_object_name = "models"
+    template_name = "gallery/search_models.html"
     paginate_by = 50
     ordering = ("-creation_date",)
 
@@ -167,7 +190,7 @@ class PictureSearch(LoginRequiredMixin, ListView):
             neg_token = list(filter(lambda x: x != "" and x.startswith("!"), search_query.split(" ")))
             if not len(token):
                 return []
-            res = list(set(list(Picture.objects.filter(tags__name=token[0]).distinct()) + list(Picture.objects.filter(Q(name__icontains=token[0])).distinct())))
+            res = list(set(list(Model3D.objects.filter(tags__name=token[0]).distinct()) + list(Model3D.objects.filter(Q(name__icontains=token[0])).distinct())))
             # for each img check that neg token is not a flag and not in name
             p_to_del = []
             for p in res:
@@ -181,17 +204,17 @@ class PictureSearch(LoginRequiredMixin, ListView):
                 res.remove(p)
                 
             for t in token[1:]:
-                token_res = list(Picture.objects.filter(tags__name=t).distinct()) + list(Picture.objects.filter(Q(name__icontains=t)).distinct())
+                token_res = list(Model3D.objects.filter(tags__name=t).distinct()) + list(Model3D.objects.filter(Q(name__icontains=t)).distinct())
                 res = list(filter(lambda x: x in token_res, res))
             return res
         
         return []
 
 
-class PicturesByTags(LoginRequiredMixin, ListView):
-    model = Picture
-    context_object_name = "pictures"
-    template_name = "gallery/pictures_by_tags.html"
+class ModelsByTags(LoginRequiredMixin, ListView):
+    model = Model3D
+    context_object_name = "models"
+    template_name = "gallery/models_by_tags.html"
     paginate_by = 50
     ordering = ("-creation_date",)
 
@@ -199,7 +222,7 @@ class PicturesByTags(LoginRequiredMixin, ListView):
         tag = self.kwargs.get("tag_name", None)
         results = []
         if tag:
-            results = Picture.objects.filter(tags__name=tag)
+            results = Model3D.objects.filter(tags__name=tag)
         return results
     
     def get_context_data(self, **kwargs):
@@ -208,20 +231,33 @@ class PicturesByTags(LoginRequiredMixin, ListView):
         return context
 
 
-class PictureDetails(LoginRequiredMixin, DetailView):
-    model = Picture
-    template_name = "gallery/single_picture.html"
+class ModelDetails(LoginRequiredMixin, DetailView):
+    model = Model3D
+    template_name = "gallery/single_model.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
+    def get_all_img(self):
+        return Image.objects.filter(linked_model=self.kwargs.get("pk", None))
+
+class ModelDelete(IsSuperuserMixin, DeleteView):
+    model = Model3D
+    success_url = reverse_lazy("gallery:models")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["pk"] = self.kwargs.get("pk", None)
         return context
 
-class PictureDelete(IsSuperuserMixin, DeleteView):
-    model = Picture
-    success_url = reverse_lazy("gallery:pictures")
+class ImageDelete(IsSuperuserMixin, DeleteView):
+    model = Image
+
+    def get_success_url(self):
+        return reverse_lazy("gallery:single_model", kwargs={'pk': self.kwargs["model_pk"]})
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["pk"] = self.kwargs.get("pk", None)
+        context["model_pk"] = self.kwargs.get("model_pk", None)
         return context

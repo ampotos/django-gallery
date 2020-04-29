@@ -23,7 +23,7 @@ urlpatterns = [
         ListingUpdate.as_view(),
         name="update",
     ),
-    # update single picture tags only
+    # update single listing tags only
     path(
         "<int:pk>/update_tag/",
         ListingUpdateTagsView.as_view(),

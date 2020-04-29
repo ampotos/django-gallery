@@ -14,7 +14,7 @@ body {
     margin: 0 20px 0 20px;
     -webkit-columns: 2 200px;
     -moz-columns: 2 200px;
-    columns: 2 200px;
+    columns: 1 200px;
 
     -webkit-column-gap: 10px;
     -moz-column-gap: 10px;
@@ -27,7 +27,7 @@ body {
     margin: 0 20px 0 20px;
     -webkit-columns: 3 200px;
     -moz-columns: 3 200px;
-    columns: 3 200px;
+    columns: 2 200px;
 
     -webkit-column-gap: 10px;
     -moz-column-gap: 10px;
@@ -40,7 +40,7 @@ body {
     margin: 0 20px 0 20px;
     -webkit-columns: 4 250px;
     -moz-columns: 4 250px;
-    columns: 4 250px;
+    columns: 3 250px;
 
     -webkit-column-gap: 10px;
     -moz-column-gap: 10px;

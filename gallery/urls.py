@@ -5,38 +5,44 @@ app_name = "gallery"
 
 urlpatterns = [
     # need to move to list of view by tags
-    path("", PictureMenu.as_view(), name="home"),
+    path("", ModelMenu.as_view(), name="home"),
     # need to search in name + tags
-    path("search/", PictureSearch.as_view(), name="search"),
+    path("search/", ModelSearch.as_view(), name="search"),
     # will be merged with search
-    path("tags/<str:tag_name>/", PicturesByTags.as_view(), name="tag_name"),
+    path("tags/<str:tag_name>/", ModelsByTags.as_view(), name="tag_name"),
     # all images
-    path("image/", PictureAll.as_view(), name="pictures"),
+    path("model/", ModelAll.as_view(), name="models"),
     # upload new zip
     path("upload/zip/<str:upload_state>/", ZipUpload.as_view(), name="upload"),
     path("upload/zip/", ZipUpload.as_view(), name="upload"),
-    # single picture
+    # single model
     path(
-        "image/<int:pk>/",
-        PictureDetails.as_view(),
-        name="single_picture",
+        "model/<int:pk>/",
+        ModelDetails.as_view(),
+        name="single_model",
     ),
-    # delete single picture
+    # delete single model
     path(
-        "image/<int:pk>/delete/",
-        PictureDelete.as_view(),
-        name="delete_picture",
+        "model/<int:pk>/delete/",
+        ModelDelete.as_view(),
+        name="delete_model",
     ),
-    # update single picture
+    #delete single image
     path(
-        "image/<int:pk>/update/",
-        PictureUpdate.as_view(),
-        name="update_picture",
+        "model/<int:model_pk>/img/<int:pk>/delete/",
+        ImageDelete.as_view(),
+        name="delete_image",
     ),
-    # update single picture tags only
+    # update single model
     path(
-        "image/<int:pk>/update_tag/",
-        PictureUpdateTagsView.as_view(),
-        name="update_picture_tag",
+        "model/<int:pk>/update/",
+        ModelUpdate.as_view(),
+        name="update_model",
+    ),
+    # update single model tags only
+    path(
+        "model/<int:pk>/update_tag/",
+        ModelUpdateTagsView.as_view(),
+        name="update_model_tag",
     ),
 ]
