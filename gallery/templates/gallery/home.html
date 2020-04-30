@@ -27,7 +27,7 @@
     </a>
   </li>
   {{ tag_img }}
-  {% for t in tags %}
+  {% for t in tags_dict %}
   <li>
     <a href="{% url 'gallery:tag_name' tag_name=t.name %}" class="text-dark">
       <div class="card rounded-0">

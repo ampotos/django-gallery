@@ -126,12 +126,14 @@ class ZipUpload(IsSuperuserMixin, FormView):
     
 class ModelMenu(LoginRequiredMixin, ListView):
     model = Tag
+    context_object_name = "tags"
     template_name = "gallery/home.html"
     paginate_by = MODEL_PER_PAGE
-
+    ordering = ("-name",)
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['tags'] = list(filter(lambda x: x['model'], [{'name': t.name, 'model': self.get_random_model_tag(t)} for t in Tag.objects.all()]))
+        context['tags_dict'] = list(filter(lambda x: x['model'], [{'name': t.name, 'model': self.get_random_model_tag(t)} for t in context['tags']]))
         return context
 
     def get_model(self):
