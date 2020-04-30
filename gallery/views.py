@@ -22,6 +22,7 @@ from zipfile import ZipFile, BadZipFile
 from io import BytesIO
 import json
 import uuid
+import os
 
 class IsSuperuserMixin(UserPassesTestMixin):
     def test_func(self):
@@ -94,7 +95,7 @@ class ZipUpload(IsSuperuserMixin, FormView):
                     try:
                         new_model = Model3D(
                             description = model['stl_path'],
-                            name = model_name,
+                            name = os.path.basename(model['stl_path'])[:-4],
                         )
                         new_model.save()
                         new_model.tags.add(*model['tags'].split(','))
