@@ -15,7 +15,7 @@
   <li>
     <a href="{% url 'gallery:models' %}" class="text-dark">
       <div class="card rounded-0">
-	{% if view.get_model.search_img.img %}
+	{% if view.get_model and view.get_model.search_img.img %}
         <img class="card-img-top rounded-0" src="{{ view.get_model.search_img.img.url }}">
 	{% endif %}
         <div class="card-body">
