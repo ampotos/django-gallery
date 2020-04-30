@@ -109,7 +109,7 @@ class ZipUpload(IsSuperuserMixin, FormView):
                                 new_model.save()
                                 search_set = True
                     except Exception as e:
-                        return 'cannot save new model: ' + e.what()
+                        return 'cannot save new model: ' + e.message
         except BadZipFile:
             return 'not a valid zip'
         return 'Success'
