@@ -7,6 +7,8 @@ from django.conf import settings
 
 # Create your models here.
 
+MODEL_PER_PAGE = 25
+
 class Model3D(models.Model):
     creation_date = models.DateTimeField(default=timezone.now)
     search_img = models.ForeignKey('Image', on_delete=models.DO_NOTHING, related_name='search_img', null=True)

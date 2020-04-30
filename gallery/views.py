@@ -24,6 +24,8 @@ import json
 import uuid
 import os
 
+MODEL_PER_PAGE = 25
+
 class IsSuperuserMixin(UserPassesTestMixin):
     def test_func(self):
         return self.request.user.is_superuser
@@ -125,7 +127,7 @@ class ZipUpload(IsSuperuserMixin, FormView):
 class ModelMenu(LoginRequiredMixin, ListView):
     model = Tag
     template_name = "gallery/home.html"
-    paginate_by = 50
+    paginate_by = MODEL_PER_PAGE
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -147,7 +149,7 @@ class ModelAll(LoginRequiredMixin, ListView):
     template_name = "gallery/models_all.html"
     context_object_name = "models"
     ordering = ("-creation_date",)
-    paginate_by = 50
+    paginate_by = MODEL_PER_PAGE
 
 class ModelUpdate(IsSuperuserMixin, UpdateView):
     model = Model3D
@@ -178,7 +180,7 @@ class ModelSearch(LoginRequiredMixin, ListView):
     model = Model3D
     context_object_name = "models"
     template_name = "gallery/search_models.html"
-    paginate_by = 50
+    paginate_by = MODEL_PER_PAGE
     ordering = ("-creation_date",)
 
     def get_queryset(self):
@@ -216,7 +218,7 @@ class ModelsByTags(LoginRequiredMixin, ListView):
     model = Model3D
     context_object_name = "models"
     template_name = "gallery/models_by_tags.html"
-    paginate_by = 50
+    paginate_by = MODEL_PER_PAGE
     ordering = ("-creation_date",)
 
     def get_queryset(self):
