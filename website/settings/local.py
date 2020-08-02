@@ -11,7 +11,7 @@ ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "StlViewer",
+        "NAME": "stlviewer",
         "USER": "test",
         "PASSWORD": "test",
         "HOST": "localhost",
